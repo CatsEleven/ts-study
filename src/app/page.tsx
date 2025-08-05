@@ -73,6 +73,16 @@ AかつBの型
 交わる場所、交差点、共通部分、交点
 */
 
+type tire = {
+  tire: string
+}
+
+type handle = {
+  handle: string
+}
+
+type car = tire & handle
+
 
 /*
 関数と型
@@ -198,35 +208,39 @@ function lastItemGenerics<T>(array: T[]): T {
 
 let lastnumberGenerics = lastItemGenerics<number>(numbers)
 
-
-
-
-
-
-
-
-
-
-
-
-
 // todo promiseも勉強する
+/*
+ promise,async, await
+ 同期処理
+  一連の処理が順番に実行される方式。
+  各処理は前の処理が完了するまで待機し、完了してから次の処理に進む。
+非同期処理
+待機せずに処理を進める方式。
+時間のかかる処理を開始したら、その完了を待たずに次の処理に進む。
+結果が必要なときに、完了通知やコールバックなどで結果を受け取る。
 
 
+関数の前にasyncをつけることで、その関数が非同期関数となる
+非同期関数は常にpromiseを返す
 
+awaitは、asyncのなかでのみ使用可能でPromiseが解決されるまで処理を一時停止し、完了後に結果を返す
 
+Promise（プロミス）は、JavaScript（およびTypeScript）における非同期処理の結果を表現・管理するためのオブジェクト
+3つの状態
+pending（保留）
+まだ完了していない状態（処理中）。
 
+fulfilled（履行済み）
+正常に完了した状態（成功）。
 
+rejected（拒否）
+失敗した状態（エラー発生）。
+これで状態が変わるから、Reactが再レンダリングできる
 
-
-
-
-
-
-
-
-
-
+Next.jsにおいては、async functionのコンポーネントをそのままエクスポートできる。
+async functionが返すPromiseは「そのコンポーネントのレンダリング結果（JSX）」でresolveされる
+Next.js等のフレームワークはPromiseがresolveされるまで待ち、その後のJSXをレンダリングします。
+*/
 
 
 
