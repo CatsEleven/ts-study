@@ -74,6 +74,145 @@ AかつBの型
 */
 
 
+/*
+関数と型
+TSは、関数のパラメーターについては型推論をすることができない。
+→暗黙的にanyになりますエラーが出る
+
+戻り値にも、型を指定することができる。引数にとる（）のあとに：型を指定する
+戻り値の型は、自動的に推論される
+戻り値のエラーは「型Aを、型Bに割り当てることはできません」のエラー
+*/
+
+function addNUmber(a: number, b: number): number {
+    return a + b
+}
+
+/*
+アロー関数
+*/
+type addFunction = (a: number, b: number) => number
+const addNumber: addFunction = (a, b) => a + b
+
+/*
+void型
+関数の戻り値が存在しないことを示す型
+*/
+function greet(): void {
+    console.log("hallo")
+}
+
+
+/*
+never型
+関数が戻り値を返さず、かつ呼び出し元に制御を戻すことが決してない状況を表す型
+関数が例外を投げるか、無限ループに入って正常に終了しないことを示す
+switch文のdefault処理など、本来は到達しないコードの部分にnever型をつけておけば、実行する前にエラーを検出することができる
+*/
+function error(message: string): never {
+    throw Error(message)
+}
+
+
+/*
+関数オーバーロード
+このパターンでは、4通りの引数のとり方がある。
+プロパティ includesは、型numer|stringに存在しません。
+→numberかstringが返却されることを期待しているため、numberに対してincludesを使うことができないため
+
+そこで、すべての型のパターンを列挙することで、TSのエラーを未然に防ぐ
+*/
+
+function addNum(a: number, b: number): number;
+function addNum(a: string, b: string): string;
+function addNum(a: number, b: string): string;
+function addNum(a: string, b: number): string;
+
+function addNum(a: number | string, b: number | string) {
+    if (typeof a === "number" && typeof b === "number") {
+        return a + b
+    } else {
+        return a.toString() + b.toString()
+    }
+}
+
+/*
+interfaceによる型定義
+interfaceを使うと、オブジェクトがもつメソッドも定義できる
+*/
+// typeによる型定義（型エイリアス）
+type person1 = {
+    name: string
+    age: number
+}
+
+//interfaceの場合。=による代入は必要ない
+interface person2 {
+    name: string
+    age: number
+    speak(word: string): void
+}
+
+/*
+インデックスシグニチャ
+オブジェクトの使い方として、コードのはじめに初期化しておいて、あとから動的にプロパティを追加することがある
+この場合、プロパティの名前は決まっていないが、その型は確定している
+インデックスシグニチャの構文は、[キーの名前（任意）:その型]:値の型　で表現する
+テンプレート文字列と組み合わせることで、キーの命名規則を決定することもできる
+*/
+interface fruitStock {
+    [i: string]: number
+}
+const stock: fruitStock = {}
+stock.apple = 1
+
+
+/*
+ジェネリクス
+ジェネリクス自体は、再利用可能、というニュアンスの単語
+ジェネリクス型は、型を抽象化して再利用可能にした型のことをいう。型を利用するときは、特定の型情報を渡すことで、はじめて具体的な型に固定される
+型を生成するための汎用的な型、と言い換えることもできる
+*/
+
+const numbers = [1, 2, 3]
+const strings = ["a", "b", "c"]
+function lastItem(array: any[]) {
+    return array[array.length - 1]
+}
+
+// これで取得することはできるが、返り値がany型になってしまう。ユニオン型で指定することもできるが、どちらの型か判定するIF文が必要だったり、関数オーバーロードが必要で実装コストがかかる
+let lastNumber = lastItem(numbers)
+let lastStirngs = lastItem(strings)
+
+/*
+function()の（）の前に、<T>と書く。これは型パラメータという。
+このTは、関数全体で参照できる汎用的な型として機能する。具体的な型が決まっていないので、任意の型を入れられる
+関数が呼び出されたときに、その型が解釈されてTに代入する
+TSが型を推論するが、できなかったときはunknown型になる。ジェネリクス関数を呼び出すときに、型を指定することもできる
+デフォルトで型を指定することもできる
+*/
+
+function lastItemGenerics<T>(array: T[]): T {
+    return array[array.length - 1]
+}
+
+let lastnumberGenerics = lastItemGenerics<number>(numbers)
+
+
+
+
+
+
+
+
+
+
+
+
+
+// todo promiseも勉強する
+
+
 
 
 
